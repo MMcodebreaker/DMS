@@ -2,6 +2,13 @@
 	<v-container>
 		<v-breadcrumbs :items="['Home','Dashboard']"></v-breadcrumbs>
 		<v-container fluid class="py-6">
+			<div v-if="hasRole('admin')">
+      <p>Admin Panel</p>
+    </div>
+
+    <div v-if="hasPermission('edit post')">
+      <p>You can edit posts</p>
+    </div>
         <v-row dense>
           <!-- Stat Widgets -->
           <v-col cols="12" md="3">
@@ -64,6 +71,7 @@
 <script setup>
 import { useAppStore } from "@/stores/appStore.js";
 import { defineProps } from 'vue';
+import { usePage } from '@inertiajs/vue3'
 
 const props = defineProps({
   current_time: { type: String, required: true },
@@ -72,6 +80,11 @@ const props = defineProps({
     default: () => [],
   },
 });
+
+const page = usePage()
+const user = page.props.auth.user
+const hasRole = (role) => user?.roles?.includes(role)
+const hasPermission = (perm) => user?.permissions?.includes(perm)
 
 const appStore = useAppStore();
 const homeUrl = '/'; 

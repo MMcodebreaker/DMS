@@ -38,6 +38,14 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             //
             'toastification' => fn () => $request->session()->get('toastification'),
+            'auth' => [
+                'user' => $request->user() ? [
+                    'id' => $request->user()->id,
+                    'name' => $request->user()->name,
+                    'roles' => $request->user()->roles->pluck('name'),
+                    'permissions' => $request->user()->roles->flatMap->permissions->pluck('name')->unique(),
+                ] : null,
+            ],
         ]);
     }
 }

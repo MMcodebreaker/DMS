@@ -53,6 +53,7 @@ class AuthenticationController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        toast(ToastTypesEnum::Success, "Logged Out Successfully !");
 
         return redirect()->route('page.login'); 
     }

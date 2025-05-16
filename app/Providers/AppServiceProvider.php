@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Passport;
+use Illuminate\Support\Facades\Gate;
+use App\Models\User;
+use Laravel\Pulse\Pulse;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,6 +17,12 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Passport::ignoreRoutes();
+
+        Gate::define('viewPulse', function (User $user) {
+            return in_array($user->email, [
+                'admin@app.com',
+            ]);
+        });
     }
 
     /**
@@ -22,5 +31,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+    
     }
 }

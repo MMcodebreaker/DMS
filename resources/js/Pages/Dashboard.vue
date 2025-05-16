@@ -1,14 +1,7 @@
 <template>
 	<v-container>
 		<v-breadcrumbs :items="['Home','Dashboard']"></v-breadcrumbs>
-		<v-container fluid class="py-6">
-			<div v-if="hasRole('admin')">
-      <p>Admin Panel</p>
-    </div>
-
-    <div v-if="hasPermission('edit post')">
-      <p>You can edit posts</p>
-    </div>
+		 <v-container fluid class="py-6">
         <v-row dense>
           <!-- Stat Widgets -->
           <v-col cols="12" md="3">
@@ -62,7 +55,13 @@
               <v-progress-linear model-value="60" color="blue" height="10" />
             </v-card>
           </v-col>
-        
+
+          <v-col cols="12">
+            <v-card class="pa-4" elevation="2">
+              <v-card-title>Notes</v-card-title>
+              <v-textarea placeholder="Type notes here..." auto-grow rows="2" />
+            </v-card>
+          </v-col>
         </v-row>
       </v-container>
 	</v-container>
@@ -71,7 +70,6 @@
 <script setup>
 import { useAppStore } from "@/stores/appStore.js";
 import { defineProps } from 'vue';
-import { usePage } from '@inertiajs/vue3'
 
 const props = defineProps({
   current_time: { type: String, required: true },
@@ -80,11 +78,6 @@ const props = defineProps({
     default: () => [],
   },
 });
-
-const page = usePage()
-const user = page.props.auth.user
-const hasRole = (role) => user?.roles?.includes(role)
-const hasPermission = (perm) => user?.permissions?.includes(perm)
 
 const appStore = useAppStore();
 const homeUrl = '/'; 

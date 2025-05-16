@@ -67,7 +67,7 @@
 </template>
 <script setup>
 import { onMounted, ref, nextTick } from 'vue'
-import { router } from '@inertiajs/vue3'
+import { router, usePoll } from '@inertiajs/vue3'
 import { useToast } from 'vue-toastification'
 import { usePage } from '@inertiajs/vue3'
 
@@ -83,6 +83,7 @@ const overlay = ref(false)
 const drawer = ref(null)
 const items = ref([
   { text: 'Dashboard', url: route('page.dashboard'), icon: 'mdi-home' },
+  { text: 'System Monitoring', url:  '/pulse', icon: ' mdi-monitor-dashboard' },
 ])
 
 const toast = useToast()
@@ -126,6 +127,8 @@ const logout = () => {
 }
 
 const user_info = ref({})
+
+
 
 // Lifecycle
 onMounted(() => {

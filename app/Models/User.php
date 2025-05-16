@@ -47,23 +47,12 @@ class User extends Authenticatable
         ];
     }
 
-    public function roles()
+    public function isAdmin()
     {
-        return $this->belongsToMany(Role::class);
-    }
+        // Example 1: If you have an 'is_admin' boolean column in users table
+        return $this->is_admin === 1;
 
-    public function hasRole($role)
-    {
-        return $this->roles->pluck('name')->contains($role);
-    }
-
-    public function hasPermission($permission)
-    {
-        foreach ($this->roles as $role) {
-            if ($role->permissions->pluck('name')->contains($permission)) {
-                return true;
-            }
-        }
-        return false;
+        // OR Example 2: If you have a 'role' column with 'admin' value
+        // return $this->role === 'admin';
     }
 }

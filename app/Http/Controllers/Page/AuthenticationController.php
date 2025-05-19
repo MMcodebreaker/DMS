@@ -26,7 +26,7 @@ class AuthenticationController extends Controller
         ]);
 
         if (Auth::check()) {
-            return redirect()->route('page.dashboard');
+            return Inertia::location(route('page.dashboard'));
         }
 
         if (Auth::attempt($credentials)) {
@@ -36,7 +36,7 @@ class AuthenticationController extends Controller
             //Sending Alert
             toast(ToastTypesEnum::Success, "Welcome back, {$userName} !");
 
-            return redirect()->route('page.dashboard');
+            return Inertia::location(route('page.dashboard'));
         }else{
             //Sending Alert
             toast(ToastTypesEnum::Error, "Invalid Credential!");

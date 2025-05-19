@@ -3,14 +3,21 @@ import {useToast} from "vue-toastification";
 
 export const useAppStore = defineStore('appStore', {
     state: () => ({
-        count: 0,
+        user_info: {},
     }),
-    getters: {
-        doubleCount(state) {
-            return state.count * 2
+    actions: {
+        setUserInfo(user) {
+            console.log("User Info")
+            console.log(user)
+            this.user_info = user
+        },
+        
+        getUserInfo() {
+            this.user_info
+        },
+        
+        clearUserInfo() {
+            this.user_info = {}
         },
     },
-    actions: {
-        
-    }
 })

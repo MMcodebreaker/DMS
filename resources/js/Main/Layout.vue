@@ -19,7 +19,7 @@
 
 			<v-list density="compact" nav>
 				<v-list-item
-					v-for="(item, i) in items" :key="i" link :title="item.text"
+					v-for="(item, i) in sidebarItems" :key="i" link :title="item.text"
 					@click="() => { drawer = false; $inertia.get(item.url) }"
 					:prepend-icon="item.icon"
 				/>
@@ -66,7 +66,7 @@
 	</v-app>
 </template>
 <script setup>
-import { onMounted, ref, nextTick } from 'vue'
+import { onMounted, ref, nextTick, computed } from 'vue'
 import { router, usePoll } from '@inertiajs/vue3'
 import { useToast } from 'vue-toastification'
 import { usePage } from '@inertiajs/vue3'
@@ -82,8 +82,12 @@ const props = defineProps({
 const overlay = ref(false)
 const drawer = ref(null)
 const items = ref([
-  { text: 'Dashboard', url: route('page.dashboard'), icon: 'mdi-home' },
-  { text: 'System Monitoring', url:  '/pulse', icon: ' mdi-monitor-dashboard' },
+  { text: 'Dashboard', url: route('page.dashboard'), icon: 'mdi-home', role_access: [1,2,3] },
+  { text: 'Document Management', url: '', icon: 'mdi mdi-printer-wireless', role_access: [1,2,3] },
+  { text: 'Patient Management', url: '', icon: 'mdi mdi-account-injury-outline', role_access: [1,2,3] },
+  { text: 'Physician Management', url: '', icon: 'mdi mdi-doctor', role_access: [1,2,3] },
+  { text: 'System Monitoring', url:  '/pulse', icon: ' mdi-monitor-dashboard', role_access: [1] },
+  { text: 'User Management', url:  '', icon: ' mdi mdi-account-group-outline', role_access: [1] },
 ])
 
 const toast = useToast()
@@ -128,7 +132,11 @@ const logout = () => {
 
 const user_info = ref({})
 
-
+const sidebarItems = computed(() => {
+  return items.value.filter((item) =>
+    item.role_access.includes(props.user_info.role)
+  )
+})
 
 // Lifecycle
 onMounted(() => {

@@ -10,8 +10,8 @@
 				<v-list>
 					<v-list-item
 					prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"
-					:subtitle="user_info.name"
-					:title="user_info.email"
+					:subtitle="props.user_info.name"
+					:title="props.user_info.email"
 					></v-list-item>
 				</v-list>
 			</template>

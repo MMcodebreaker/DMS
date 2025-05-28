@@ -53,9 +53,9 @@
 
             <a
             class="text-caption text-decoration-none text-blue mb-3"
-            href="#"
+            href="/forgot-password"
             rel="noopener noreferrer"
-            target="_blank"
+            
             >
             Forgot login password?</a>
             </form>

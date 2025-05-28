@@ -18,6 +18,7 @@ class AuthenticationService
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => $data['password'],
+            'role' => $data['role'],
         ];
   
         $formData['password'] = bcrypt($data['password']);

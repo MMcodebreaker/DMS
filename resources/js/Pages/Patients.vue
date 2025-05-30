@@ -1,6 +1,6 @@
 <template>
 	<v-container>
-		<v-breadcrumbs :items="['Application','User Management']"></v-breadcrumbs>
+		<v-breadcrumbs :items="['Application','Patient Management']"></v-breadcrumbs>
 		<v-container fluid class="py-6">
         <v-row no-gutter>
           <v-col sm="12" md="12">
@@ -13,7 +13,7 @@
                   </v-col>
                   <v-col sm="12" md="3">
                       <v-btn 
-                      v-if="users.data.length != 0"
+                      v-if="patients.data.length != 0"
                       @click="handleNew"
                       block
                       class="mt-2 mb-3"
@@ -26,46 +26,35 @@
           <v-col sm="12" md="12">
               <v-table density="compact">
                   <thead>
-                      <tr>
-                          <th class="text-center font-weight-bold">Name</th>
-                           <th class="text-center font-weight-bold">Role</th>
-                          <th class="text-center font-weight-bold">Created At</th>
-                          <th class="text-center font-weight-bold">Action</th>
-                      </tr>
+                        <tr>
+                            <th class="text-center font-weight-bold">Patient No.</th>
+                            <th class="text-center font-weight-bold">First Name</th>
+                            <th class="text-center font-weight-bold">Middle Name</th>
+                            <th class="text-center font-weight-bold">Last Name</th>
+                            <th class="text-center font-weight-bold">Suffix</th>
+                            <th class="text-center font-weight-bold">Created At</th>
+                            <th class="text-center font-weight-bold">Action</th>
+                        </tr>
                   </thead>
                   <tbody>
-                      <tr v-for="data in users.data" :key="data.id">
+                      <tr v-for="data in patients.data" :key="data.id">
                           <td class="text-center">
-                              {{ data.name }}
+                            {{ data.patient_no }}
                           </td>
                           <td class="text-center">
-                            <template v-if="data.role === 1">
-                              <v-chip
-                              block
-                              color="blue"
-                              >Administrator</v-chip>
-                            </template>
-                            <template v-else-if="data.role === 2">
-                              <v-chip
-                              block
-                              color="green"
-                              >Physician</v-chip>
-                            </template>
-                            <template v-else-if="data.role === 3">
-                              <v-chip
-                              block
-                              color="orange"
-                              >Staff</v-chip>
-                            </template>
-                            <template v-else>
-                              <v-chip
-                              block
-                              color="black"
-                              >Undefined</v-chip>
-                            </template>
+                            {{ data.firstname }}
                           </td>
                           <td class="text-center">
-                              {{ data.created_at }}
+                            {{ data.middlename }}
+                          </td>
+                          <td class="text-center">
+                            {{ data.lastname }}
+                          </td>
+                          <td class="text-center">
+                            {{ data.suffix }}
+                          </td>
+                          <td class="text-center">
+                            {{ data.created_at }}
                           </td>
                           <td class="text-center">
                               <v-btn-group class="h-75">
@@ -80,8 +69,8 @@
                               </v-btn-group>
                           </td>
                       </tr>
-                      <tr v-if="users.data.length === 0">
-                          <td colspan="3">
+                      <tr v-if="patients.data.length === 0">
+                          <td colspan="7">
                               <p class="text-center font-weight-bold mt-5">No Record Found! </p>
                               <p class="text-center">Do you want to create new record?</p>
                               <p class="text-center">
@@ -145,38 +134,46 @@
     class="w-50"
     >
         <v-card>
-            <v-card-title>User Form</v-card-title>
+            <v-card-title>Patient Form</v-card-title>
             <v-card-subtitle>Please input the correct and valid data.</v-card-subtitle>
             <v-card-text>
                 <form @submit.prevent="submit">
                     <v-text-field
-                    label="Name"
-                    v-model="Form.name"
-                    :error-messages="Form.errors.name"
+                    label="Patient No"
+                    :error-messages="Form.errors.patient_no"
+                    v-model="Form.patient_no"
                     ></v-text-field>
 
                     <v-text-field
-                    label="Email"
-                    type="email"
-                    v-model="Form.email"
-                    :error-messages="Form.errors.email"
+                    label="First Name"
+                    v-model="Form.firstname"
+                    :error-messages="Form.errors.firstname"
+                    ></v-text-field>
+
+                     <v-text-field
+                    label="Middle Name"
+                    v-model="Form.middlename"
                     ></v-text-field>
 
                     <v-text-field
-                    type="password"
-                    label="Password"
-                    v-model="Form.password"
+                    label="Last Name"
+                    v-model="Form.lastname"
+                    :error-messages="Form.errors.lastname"
+                    ></v-text-field>
+
+                    <v-text-field
+                    label="Suffix"
+                    v-model="Form.suffix"
                     ></v-text-field>
 
                     <v-select
-                    label="Role"
-                    clearable
-                    v-model="Form.role"
-                    :items="user_role"
+                    label="Gender"
+                    :items="gender"
                     item-title="title"
                     item-value="value"
+                    v-model="Form.gender"
                     ></v-select>
-
+                    
                     <v-btn
                     color="green"
                     @click="HandleUpdateSubmit"
@@ -198,36 +195,44 @@
     class="w-50"
     >
         <v-card>
-            <v-card-title>User Form</v-card-title>
+            <v-card-title>Patient Form</v-card-title>
             <v-card-subtitle>Please input the correct and valid data.</v-card-subtitle>
             <v-card-text>
                 <form @submit.prevent="submit">
-                    <v-text-field
-                    label="Name"
-                    v-model="Form.name"
-                    :error-messages="Form.errors.name"
+                     <v-text-field
+                    label="Patient No"
+                    :error-messages="Form.errors.patient_no"
+                    v-model="Form.patient_no"
                     ></v-text-field>
 
                     <v-text-field
-                    label="Email"
-                    type="email"
-                    v-model="Form.email"
-                    :error-messages="Form.errors.email"
+                    label="First Name"
+                    v-model="Form.firstname"
+                    :error-messages="Form.errors.firstname"
+                    ></v-text-field>
+
+                     <v-text-field
+                    label="Middle Name"
+                    v-model="Form.middlename"
                     ></v-text-field>
 
                     <v-text-field
-                    type="password"
-                    label="Password"
-                    v-model="Form.password"
+                    label="Last Name"
+                    v-model="Form.lastname"
+                    :error-messages="Form.errors.lastname"
+                    ></v-text-field>
+
+                    <v-text-field
+                    label="Suffix"
+                    v-model="Form.suffix"
                     ></v-text-field>
 
                     <v-select
-                    label="Role"
-                    clearable
-                    v-model="Form.role"
-                    :items="user_role"
+                    label="Gender"
+                    :items="gender"
                     item-title="title"
                     item-value="value"
+                    v-model="Form.gender"
                     ></v-select>
 
                     <v-btn
@@ -260,27 +265,15 @@ const props = defineProps({
   },
 });
 
-const users = ref(page.props.users);
-const user_role = ref([
-  {
-    title : 'Administrator',
-    value : 1,
-  },
-  {
-    title : 'Physician',
-    value : 2,
-  },
-  {
-    title : 'Staff',
-    value : 3,
-  }
-])
+const patients = ref(page.props.patients);
+
+
 const searchTerm = ref(page.props.searchTerm || '');
 const pagination = ref({
-    page: users.value.current_page,
-    pages: users.value.last_page,
-    total: users.value.total,
-    to: users.value.to
+    page: patients.value.current_page,
+    pages: patients.value.last_page,
+    total: patients.value.total,
+    to: patients.value.to
 });
 
 const performSearch = () => {
@@ -292,20 +285,33 @@ const pageChanged = (newPage) => {
 };
 
 const loadPage = (pageNo) => {
-    const url = new URL('/users', window.location.origin);
+    const url = new URL('/patients', window.location.origin);
     url.searchParams.set('page', pageNo);
     url.searchParams.set('search', searchTerm.value);
     
     router.get(url.toString(), { preserveState: true,});
 };
 
+const gender = ref([
+    {
+        title : "Male",
+        value : 1
+    },
+    {
+        title : "Female",
+        value : 2
+    }
+])
+
 
 const Form = useForm({
     id : null,
-    name : null,
-    email : null,
-    role : null,
-    password : null,
+    firstname : null,
+    middlename : null,
+    lastname : null,
+    suffix : null,
+    patient_no : null,
+    gender : null,
 });
 
 const dialogForm = ref(false);
@@ -314,9 +320,12 @@ const dialogNewForm = ref(false);
 const handleEdit = (index, data) =>{
     dialogForm.value = true;
     Form.id = data.id;
-    Form.name = data.name;
-    Form.role = data.role;
-    Form.email = data.email;
+    Form.firstname = data.firstname;
+    Form.middlename = data.middlename;
+    Form.lastname = data.lastname;
+    Form.suffix = data.suffix;
+    Form.patient_no = data.patient_no;
+    Form.gender = data.gender;
 }
 
 const handleNew = () =>{
@@ -333,7 +342,7 @@ const handleDelete = (id) => {
 
 
 const Delete = () => {
-    Form.post('/users/delete',{
+    Form.post('/patients/delete',{
         preserveScroll: true,
         onSuccess: (success) => {
             Form.reset();
@@ -347,7 +356,7 @@ const Delete = () => {
 
 
 const HandleUpdateSubmit = () => {
-    Form.post('/users/update',{
+    Form.post('/patients/update',{
         preserveScroll: true,
         onSuccess: (success) => {
             Form.reset();
@@ -360,7 +369,7 @@ const HandleUpdateSubmit = () => {
 }
 
 const HandleStoreSubmit = () => {
-    Form.post('/users/store',{
+    Form.post('/patients/store',{
         preserveScroll: true,
         onSuccess: (success) => {
             Form.reset();
@@ -374,13 +383,13 @@ const HandleStoreSubmit = () => {
 
 
 
-watch(() => page.props.users, (newData) => {
+watch(() => page.props.patients , (newData) => {
     console.log(newData)
-    users.value = newData;
-    pagination.value.page = newData.current_page;
-    pagination.value.pages = newData.last_page;
-    pagination.value.total = newData.total;
-    pagination.value.to = newData.to;
+    patients.value = newData;
+    patients.value.page = newData.current_page;
+    patients.value.pages = newData.last_page;
+    patients.value.total = newData.total;
+    patients.value.to = newData.to;
 }, { immediate: true });
 
 watch(searchTerm, () => {

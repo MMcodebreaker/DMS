@@ -1,6 +1,6 @@
 <template>
 	<v-container>
-		<v-breadcrumbs :items="['Application','User Management']"></v-breadcrumbs>
+		<v-breadcrumbs :items="['Application','Setting Management']"></v-breadcrumbs>
 		<v-container fluid class="py-6">
         <v-row no-gutter>
           <v-col sm="12" md="12">
@@ -13,7 +13,7 @@
                   </v-col>
                   <v-col sm="12" md="3">
                       <v-btn 
-                      v-if="users.data.length != 0"
+                      v-if="settings.data.length != 0"
                       @click="handleNew"
                       block
                       class="mt-2 mb-3"
@@ -26,46 +26,32 @@
           <v-col sm="12" md="12">
               <v-table density="compact">
                   <thead>
-                      <tr>
-                          <th class="text-center font-weight-bold">Name</th>
-                           <th class="text-center font-weight-bold">Role</th>
-                          <th class="text-center font-weight-bold">Created At</th>
-                          <th class="text-center font-weight-bold">Action</th>
-                      </tr>
+                        <tr>
+                            <th class="text-center font-weight-bold">Name</th>
+                            <th class="text-center font-weight-bold">Value</th>
+                            <th class="text-center font-weight-bold">Status</th>
+                            <th class="text-center font-weight-bold">Created At</th>
+                            <th class="text-center font-weight-bold">Action</th>
+                        </tr>
                   </thead>
                   <tbody>
-                      <tr v-for="data in users.data" :key="data.id">
+                      <tr v-for="data in settings.data" :key="data.id">
                           <td class="text-center">
-                              {{ data.name }}
+                            {{ data.name }}
                           </td>
                           <td class="text-center">
-                            <template v-if="data.role === 1">
-                              <v-chip
-                              block
-                              color="blue"
-                              >Administrator</v-chip>
+                            {{ data.value }}
+                          </td>
+                          <td class="text-center">
+                            <template v-if="data.status === 1">
+                                <v-chip color="green">Enabled</v-chip>
                             </template>
-                            <template v-else-if="data.role === 2">
-                              <v-chip
-                              block
-                              color="green"
-                              >Physician</v-chip>
-                            </template>
-                            <template v-else-if="data.role === 3">
-                              <v-chip
-                              block
-                              color="orange"
-                              >Staff</v-chip>
-                            </template>
-                            <template v-else>
-                              <v-chip
-                              block
-                              color="black"
-                              >Undefined</v-chip>
+                             <template v-else>
+                                <v-chip color="red">Disbaled</v-chip>
                             </template>
                           </td>
                           <td class="text-center">
-                              {{ data.created_at }}
+                            {{ data.created_at }}
                           </td>
                           <td class="text-center">
                               <v-btn-group class="h-75">
@@ -80,8 +66,8 @@
                               </v-btn-group>
                           </td>
                       </tr>
-                      <tr v-if="users.data.length === 0">
-                          <td colspan="3">
+                      <tr v-if="settings.data.length === 0">
+                          <td colspan="5">
                               <p class="text-center font-weight-bold mt-5">No Record Found! </p>
                               <p class="text-center">Do you want to create new record?</p>
                               <p class="text-center">
@@ -145,36 +131,28 @@
     class="w-50"
     >
         <v-card>
-            <v-card-title>User Form</v-card-title>
+            <v-card-title>Setting Form</v-card-title>
             <v-card-subtitle>Please input the correct and valid data.</v-card-subtitle>
             <v-card-text>
                 <form @submit.prevent="submit">
                     <v-text-field
                     label="Name"
-                    v-model="Form.name"
                     :error-messages="Form.errors.name"
+                    v-model="Form.name"
                     ></v-text-field>
 
                     <v-text-field
-                    label="Email"
-                    type="email"
-                    v-model="Form.email"
-                    :error-messages="Form.errors.email"
-                    ></v-text-field>
-
-                    <v-text-field
-                    type="password"
-                    label="Password"
-                    v-model="Form.password"
+                    label="Value"
+                    v-model="Form.value"
+                    :error-messages="Form.errors.value"
                     ></v-text-field>
 
                     <v-select
-                    label="Role"
-                    clearable
-                    v-model="Form.role"
-                    :items="user_role"
+                    label="Status"
+                    :items="statuses"
                     item-title="title"
                     item-value="value"
+                    v-model="Form.status"
                     ></v-select>
 
                     <v-btn
@@ -198,37 +176,30 @@
     class="w-50"
     >
         <v-card>
-            <v-card-title>User Form</v-card-title>
+            <v-card-title>Setting Form</v-card-title>
             <v-card-subtitle>Please input the correct and valid data.</v-card-subtitle>
             <v-card-text>
                 <form @submit.prevent="submit">
                     <v-text-field
                     label="Name"
-                    v-model="Form.name"
                     :error-messages="Form.errors.name"
+                    v-model="Form.name"
                     ></v-text-field>
 
                     <v-text-field
-                    label="Email"
-                    type="email"
-                    v-model="Form.email"
-                    :error-messages="Form.errors.email"
-                    ></v-text-field>
-
-                    <v-text-field
-                    type="password"
-                    label="Password"
-                    v-model="Form.password"
+                    label="Value"
+                    v-model="Form.value"
+                    :error-messages="Form.errors.value"
                     ></v-text-field>
 
                     <v-select
-                    label="Role"
-                    clearable
-                    v-model="Form.role"
-                    :items="user_role"
+                    label="Status"
+                    :items="statuses"
                     item-title="title"
                     item-value="value"
+                    v-model="Form.status"
                     ></v-select>
+
 
                     <v-btn
                     color="green"
@@ -260,27 +231,25 @@ const props = defineProps({
   },
 });
 
-const users = ref(page.props.users);
-const user_role = ref([
-  {
-    title : 'Administrator',
-    value : 1,
-  },
-  {
-    title : 'Physician',
-    value : 2,
-  },
-  {
-    title : 'Staff',
-    value : 3,
-  }
+const settings = ref(page.props.settings);
+
+const statuses = ref([
+    {
+        title : "Enabled",
+        value : 1
+    },
+     {
+        title : "Disbaled",
+        value : 0
+    }
 ])
+
 const searchTerm = ref(page.props.searchTerm || '');
 const pagination = ref({
-    page: users.value.current_page,
-    pages: users.value.last_page,
-    total: users.value.total,
-    to: users.value.to
+    page: settings.value.current_page,
+    pages: settings.value.last_page,
+    total: settings.value.total,
+    to: settings.value.to
 });
 
 const performSearch = () => {
@@ -292,7 +261,7 @@ const pageChanged = (newPage) => {
 };
 
 const loadPage = (pageNo) => {
-    const url = new URL('/users', window.location.origin);
+    const url = new URL('/settings', window.location.origin);
     url.searchParams.set('page', pageNo);
     url.searchParams.set('search', searchTerm.value);
     
@@ -303,9 +272,8 @@ const loadPage = (pageNo) => {
 const Form = useForm({
     id : null,
     name : null,
-    email : null,
-    role : null,
-    password : null,
+    value : null,
+    status : null,
 });
 
 const dialogForm = ref(false);
@@ -315,8 +283,8 @@ const handleEdit = (index, data) =>{
     dialogForm.value = true;
     Form.id = data.id;
     Form.name = data.name;
-    Form.role = data.role;
-    Form.email = data.email;
+    Form.value = data.value;
+    Form.status = data.status;
 }
 
 const handleNew = () =>{
@@ -333,7 +301,7 @@ const handleDelete = (id) => {
 
 
 const Delete = () => {
-    Form.post('/users/delete',{
+    Form.post('/settings/delete',{
         preserveScroll: true,
         onSuccess: (success) => {
             Form.reset();
@@ -347,7 +315,7 @@ const Delete = () => {
 
 
 const HandleUpdateSubmit = () => {
-    Form.post('/users/update',{
+    Form.post('/settings/update',{
         preserveScroll: true,
         onSuccess: (success) => {
             Form.reset();
@@ -360,27 +328,27 @@ const HandleUpdateSubmit = () => {
 }
 
 const HandleStoreSubmit = () => {
-    Form.post('/users/store',{
+    Form.post('/settings/store',{
         preserveScroll: true,
         onSuccess: (success) => {
             Form.reset();
 			      dialogNewForm.value = false;
         },
         onError: (error) => {
-
+            console.log(error)
         }
     })
 }
 
 
 
-watch(() => page.props.users, (newData) => {
+watch(() => page.props.settings, (newData) => {
     console.log(newData)
-    users.value = newData;
-    pagination.value.page = newData.current_page;
-    pagination.value.pages = newData.last_page;
-    pagination.value.total = newData.total;
-    pagination.value.to = newData.to;
+    settings.value = newData;
+    settings.value.page = newData.current_page;
+    settings.value.pages = newData.last_page;
+    settings.value.total = newData.total;
+    settings.value.to = newData.to;
 }, { immediate: true });
 
 watch(searchTerm, () => {

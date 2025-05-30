@@ -3,24 +3,24 @@
 namespace App\Http\Controllers\Page;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\Inertia;
 
 use function App\Helpers\toast;
 use App\Enums\ToastTypesEnum;
 
-use App\Services\UserService;
+use App\Services\SettingService;
 
-class UserController extends Controller
+class SettingController extends Controller
 {
-    protected UserService $userService;
+    protected SettingService $settingService;
 
-    public function __construct(UserService $userService)
+    public function __construct(SettingService $settingService)
     {
-        $this->userService = $userService;
+        $this->settingService = $settingService;
     }
 
     public function index(): Response
@@ -28,10 +28,10 @@ class UserController extends Controller
         $search = request('search');
         $rowsPerPage = request('rowsPerPage', 10);
 
-        $users = $this->userService->getFilteredUsers($search, $rowsPerPage);
+        $settings = $this->settingService->getFilteredSettings($search, $rowsPerPage);
        
-        return Inertia::render('Users', [
-            'users' => $users,
+        return Inertia::render('Settings', [
+            'settings' => $settings,
             'searchContext' => request('searchContext', ''),
             'searchTerm' => request('searchTerm', ''),
             "user_info" => Auth::user()
@@ -41,48 +41,48 @@ class UserController extends Controller
 
      public function delete(Request $request) : RedirectResponse
     {
-        $users = $this->userService->deleteUser($request->id);
+        $settings = $this->settingService->deleteSetting($request->id);
         
-        if($users){
+        if($settings){
             toast(ToastTypesEnum::Success, "Successfully Deleted!");
         }else{
             toast(ToastTypesEnum::Error, "Unsuccessfully Deleted!");
         }
         
-        return to_route('page.users');
+        return to_route('page.settings');
     }
 
     public function update(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|unique:user,prc_no',
+            'value' => 'required|string|max:255',
         ]);
 
-        $users = $this->userService->updateUser($request->all());
-        if($users){
+        $settings = $this->settingService->updateSetting($request->all());
+        if($settings){
             toast(ToastTypesEnum::Success, "Successfully Update!");
         }else{
             toast(ToastTypesEnum::Error, "Unsuccessfully Update!");
         }
         
-        return to_route('page.users');
+        return to_route('page.settings');
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|unique:users,email',
+            'value' => 'required|string|max:255',
         ]);
 
-        $users = $this->userService->storeUser($request->all());
-        if($users){
+        $patient = $this->settingService->storeSetting($request->all());
+        if($patient){
             toast(ToastTypesEnum::Success, "Successfully Save!");
         }else{
             toast(ToastTypesEnum::Error, "Unsuccessfully Save!");
         }
         
-        return to_route('page.users');
+        return to_route('page.settings');
     }
 }

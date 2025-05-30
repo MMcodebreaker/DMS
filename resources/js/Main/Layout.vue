@@ -93,11 +93,12 @@ const drawer = ref(null)
 
 const items = ref([
 	{ text: 'Dashboard', url: route('page.dashboard'), icon: 'mdi-home', role_access: [1, 2, 3] },
-	{ text: 'Document Management', url: '', icon: 'mdi mdi-printer-wireless', role_access: [1, 2, 3] },
-	{ text: 'Patient Management', url: '', icon: 'mdi mdi-account-injury-outline', role_access: [1, 2, 3] },
-	{ text: 'Physician Management', url: '', icon: 'mdi mdi-doctor', role_access: [1, 2, 3] },
+	{ text: 'Document Management', url:  route('page.document'), icon: 'mdi mdi-printer-wireless', role_access: [1, 2, 3] },
+	{ text: 'Patient Management', url: route('page.patients'), icon: 'mdi mdi-account-injury-outline', role_access: [1, 2, 3] },
+	{ text: 'Physician Management', url: route('page.physicians'), icon: 'mdi mdi-doctor', role_access: [1, 2, 3] },
 	{ text: 'System Monitoring', url: '/pulse', icon: 'mdi-monitor-dashboard', role_access: [1] },
 	{ text: 'User Management', url: route('page.users'), icon: 'mdi mdi-account-group-outline', role_access: [1] },
+	{ text: 'Setting Management', url: route('page.settings'), icon: 'mdi mdi-cog-outline', role_access: [1] },
 ])
 
 const toast = useToast()

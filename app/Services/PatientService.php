@@ -63,7 +63,7 @@ class PatientService
         }
 
         if (isset($data['gender']) && strlen($data['gender'])) {
-            $patient->patient_no = $data['gender'] ?? null;
+            $patient->gender = $data['gender'] ?? null;
         }
 
          
@@ -101,11 +101,11 @@ class PatientService
 
      
         if (isset($data['patient_no']) && strlen($data['patient_no'])) {
-            $patient->patient_no = $data['patient_no'] ?? null;
+            $patient->patient_no = $data['patient_no'] ;
         }
 
         if (isset($data['gender']) && strlen($data['gender'])) {
-            $patient->patient_no = $data['gender'] ?? null;
+            $patient->gender = $data['gender'] ?? null;
         }
 
          
@@ -119,4 +119,7 @@ class PatientService
         }
 
     }
+
+
+    
 }

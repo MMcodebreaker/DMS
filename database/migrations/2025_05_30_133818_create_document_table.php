@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('patient_id')->index(); // indexed
             $table->string('tag')->index();                    // indexed
             $table->string('document_no')->unique();           // unique index
+            $table->longText('summary')->nullable()->index();
             $table->unsignedBigInteger('user_id')->index();    // indexed
             $table->timestamps();
 

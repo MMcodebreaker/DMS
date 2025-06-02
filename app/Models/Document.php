@@ -13,6 +13,7 @@ class Document extends Model
         'patient_id',
         'tag',
         'document_no',
+        'summary',
         'user_id',
     ];
 
